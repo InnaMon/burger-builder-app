@@ -9,17 +9,26 @@ const burger = (props) => {
     // all of these empty arrays are stored within another array
     // so props.ingredients[ingKey] gives us the number (or value) of the ingredient object
     // [...Array(props.ingredients[ingKey])] gives us => [[undefined], [undefined], [unedfined, undefined], [undefiend, undefined]]
+    // it does not matter what kind of data we store inside each nested array, all that matters is the lenght of the array 
     // map through each individual ingKey array in order to spit out BurgerIngredient comp based on how many undefined items are in each array
     // all of the BurgerIngredient comp are stored in an array 'transformedIngredients'
+    // key={ingKey + i} stores a unique value string for each ingredients key-value pair/item EX) => salad0, cheese0, cheese1
 
-    const transformedIngredients = Object.keys(props.ingredients)
+    let transformedIngredients = Object.keys(props.ingredients)
         .map(ingKey => {
-            console.log('ingKey', ingKey);
             return [...Array(props.ingredients[ingKey])]
             .map((_, i) => {
                 return <BurgerIngredient key={ingKey + i} type={ingKey} />;
             });
-        });
+        }).reduce((prevValue, currentValue) => {
+            return prevValue.concat(currentValue);
+        }, []);
+
+    if (transformedIngredients.length === 0) {
+        transformedIngredients = <p>Let's build a delicious burger!</p>;
+    }
+
+    console.log('transformedIngredients:', transformedIngredients)
 
     return (
         <div className={styles.Burger}>
