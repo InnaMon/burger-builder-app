@@ -57,12 +57,20 @@ class BurgerBuilder extends Component {
     }
 
     render () {
+        const disabledInfo = {...this.state.ingredients};
+        console.log('disabledInfo', disabledInfo);
+        for (let key in disabledInfo) {
+            console.log('disabledInfo[key]', disabledInfo[key])
+            disabledInfo[key] = disabledInfo[key] <= 0; //return true is 0 or less, disabledInfo[key] is the property (value of eack key-value pair)
+        }
+
         return (
             <Aux>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls 
                 ingredientAdded={this.addIngredientHandler}
                 ingredientRemoved={this.removeIngredientHandler}
+                disabled={disabledInfo}
                 />
             </Aux>
         );
