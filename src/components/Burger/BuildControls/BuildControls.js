@@ -16,12 +16,17 @@ const buildControls = (props) => (
           <BuildControl 
           key={ctrl.label} 
           label={ctrl.label}
-          itemPrice={props.displayPrice[ctrl.type]}
           added={() => props.ingredientAdded(ctrl.type)}
           removed={() => props.ingredientRemoved(ctrl.type)}
           disabled={props.disabled[ctrl.type]}
+          itemPrice={props.displayPrice[ctrl.type]}
           />
       ))}
+      <button 
+      className={styles.OrderButton}
+      disabled={!props.purchaseable} //disable=false so in order to disable button, purchaseable has to equal false
+      >ORDER NOW
+      </button>
     </div>
 );
 
