@@ -4,10 +4,10 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 
 const INGREDIENT_PRICES = {
-    salad: 0.5,
-    cheese: 0.4,
-    meat: 1.3,
-    bacon: 0.7
+    salad: 0.50,
+    cheese: 0.40,
+    meat: 1.30,
+    bacon: 0.70
 }
 
 class BurgerBuilder extends Component {
@@ -29,6 +29,7 @@ class BurgerBuilder extends Component {
         };
         updatedIngredients[type] = updatedCount;
         const priceAddition = INGREDIENT_PRICES[type];
+        console.log('priceAddition', priceAddition)
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice + priceAddition;
         this.setState({
@@ -58,16 +59,21 @@ class BurgerBuilder extends Component {
 
     render () {
         const disabledInfo = {...this.state.ingredients};
-        console.log('disabledInfo', disabledInfo);
         for (let key in disabledInfo) {
-            console.log('disabledInfo[key]', disabledInfo[key])
             disabledInfo[key] = disabledInfo[key] <= 0; //return true is 0 or less, disabledInfo[key] is the property (value of eack key-value pair)
+        }
+
+        const priceCopy = {...INGREDIENT_PRICES}
+        for(let item in priceCopy) {
+            console.log('price: $', priceCopy[item]);
+            //  priceCopy[item];
         }
 
         return (
             <Aux>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls 
+                displayPrice={priceCopy}
                 ingredientAdded={this.addIngredientHandler}
                 ingredientRemoved={this.removeIngredientHandler}
                 disabled={disabledInfo}
