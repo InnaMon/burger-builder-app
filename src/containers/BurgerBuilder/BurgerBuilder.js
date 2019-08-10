@@ -112,14 +112,15 @@ class BurgerBuilder extends Component {
                 </Modal>
     
                 <Burger ingredients={this.state.ingredients}/>
+                
                 <BuildControls 
-                ingredientAdded={this.addIngredientHandler}
-                ingredientRemoved={this.removeIngredientHandler}
-                disabled={disabledInfo}
-                price={this.state.totalPrice}
-                displayPrice={priceCopy}
-                purchaseable={this.state.purchaseable}
-                ordering={this.orderHandler}
+                    ingredientAdded={this.addIngredientHandler}
+                    ingredientRemoved={this.removeIngredientHandler}
+                    disabled={disabledInfo}
+                    price={this.state.totalPrice}
+                    displayPrice={priceCopy}
+                    purchaseable={this.state.purchaseable}
+                    ordering={this.orderHandler}
                 />
             </Aux>
         );
