@@ -84,6 +84,10 @@ class BurgerBuilder extends Component {
         this.setState({ordering: true})
     }
 
+    cancelPurchaseHandler = () => {
+        this.setState({ordering: false})
+    }
+
     render () {
         const disabledInfo = {...this.state.ingredients};
         for (let key in disabledInfo) {
@@ -95,7 +99,7 @@ class BurgerBuilder extends Component {
 
         return (
             <Aux>
-                <Modal show={this.state.ordering}>
+                <Modal show={this.state.ordering} modalClosed={this.cancelPurchaseHandler}>
                     <OrderSummary ingredients={this.state.ingredients}/>
                 </Modal>
     
