@@ -21,7 +21,8 @@ class BurgerBuilder extends Component {
             meat: 0
         },
         totalPrice: 4,
-        purchaseable: false
+        purchaseable: false,
+        ordering: false
     }
 
     updatePurchaseState (ingredients) {
@@ -79,6 +80,10 @@ class BurgerBuilder extends Component {
         this.updatePurchaseState(updatedIngredients);
     }
 
+    orderHandler = () => {
+        this.setState({ordering: true})
+    }
+
     render () {
         const disabledInfo = {...this.state.ingredients};
         for (let key in disabledInfo) {
@@ -86,17 +91,14 @@ class BurgerBuilder extends Component {
         }
 
         const priceCopy = {...INGREDIENT_PRICES}
-        console.log('priceCopy', priceCopy)
-        // for(let item in priceCopy) {
-        //     console.log('price: $', priceCopy[item]);
-        //      return priceCopy[item]
-        // }
+        console.log('priceCopy', priceCopy);
 
         return (
             <Aux>
-                <Modal>
+                <Modal show={this.state.ordering}>
                     <OrderSummary ingredients={this.state.ingredients}/>
                 </Modal>
+    
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls 
                 ingredientAdded={this.addIngredientHandler}
@@ -105,6 +107,7 @@ class BurgerBuilder extends Component {
                 price={this.state.totalPrice}
                 displayPrice={priceCopy}
                 purchaseable={this.state.purchaseable}
+                ordering={this.orderHandler}
                 />
             </Aux>
         );
