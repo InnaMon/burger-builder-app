@@ -14,7 +14,7 @@ class Layout extends Component {
     }
 
     toggleMenu = () => {
-        this.setState( (prevState ) => {
+        this.setState( ( prevState ) => {
             return { showSideDrawer: !prevState.showSideDrawer }
         });
     }
