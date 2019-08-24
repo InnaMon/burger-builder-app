@@ -89,7 +89,41 @@ class BurgerBuilder extends Component {
     }
 
     continuePurchaseHandler = () => {
-        alert('You continued!');
+        // alert('You continued!');
+        const order = {
+            ingredients: this.state.ingredients,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Inna Monjoseph',
+                address: {
+                    street: 'Teststreet 1',
+                    zipCode: '55379',
+                    country: 'USA'
+                },
+                email: 'test@test.com'
+            },
+            deliverMethod: 'fastest'
+        }
+
+        const genFetchWithBaseUrl = (baseUrl) => {
+            return (restOfUrl) => fetch((baseUrl + restOfUrl), {
+                method: 'POST',
+                body: JSON.stringify(order),
+                headers:{
+                    'Content-Type': 'application/json'
+                }
+            })
+            // .then(response => response.json())
+            .then(data => console.log('data', data))
+            .catch(error => console.log('Error Found!', error))
+        }
+
+        const fetchWithBaseUrl = genFetchWithBaseUrl('https://burger-builder-app-ca613.firebaseio.com/');
+
+        fetchWithBaseUrl('/orders.json')
+        // .then(response => response.json())
+        // .then(data => console.log('data', data))
+        // .catch(error => console.log('Error Found!', error))
     }
 
     render () {
