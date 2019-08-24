@@ -4,6 +4,7 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 const INGREDIENT_PRICES = {
     salad: 0.50,
@@ -22,7 +23,8 @@ class BurgerBuilder extends Component {
         },
         totalPrice: 4,
         purchaseable: false,
-        ordering: false
+        ordering: false,
+        loading: false
     }
 
     updatePurchaseState (ingredients) {
@@ -90,6 +92,8 @@ class BurgerBuilder extends Component {
 
     continuePurchaseHandler = () => {
         // alert('You continued!');
+        this.setState({ loading: true });
+
         const order = {
             ingredients: this.state.ingredients,
             price: this.state.totalPrice,
@@ -114,16 +118,25 @@ class BurgerBuilder extends Component {
                 }
             })
             // .then(response => response.json())
-            .then(data => console.log('data', data))
-            .catch(error => console.log('Error Found!', error))
+            .then(response => {
+                console.log('response', response);
+                this.setState({ 
+                    loading: false,
+                    ordering: false
+                 });
+            })
+            .catch(error => {
+                console.log('Error Found!', error);
+                this.setState({ 
+                    loading: false,
+                    ordering: false
+                });
+            })
         }
 
         const fetchWithBaseUrl = genFetchWithBaseUrl('https://burger-builder-app-ca613.firebaseio.com/');
 
         fetchWithBaseUrl('/orders.json')
-        // .then(response => response.json())
-        // .then(data => console.log('data', data))
-        // .catch(error => console.log('Error Found!', error))
     }
 
     render () {
@@ -135,14 +148,20 @@ class BurgerBuilder extends Component {
         const priceCopy = {...INGREDIENT_PRICES}
         console.log('priceCopy', priceCopy);
 
+        let orderSummary =  <OrderSummary 
+            ingredients={this.state.ingredients}
+            cancelOrder={this.cancelPurchaseHandler}
+            continueOrder={this.continuePurchaseHandler}
+            price={this.state.totalPrice}/>
+
+        if (this.state.loading) {
+            orderSummary = <Spinner/>;
+        } 
+
         return (
             <Aux>
                 <Modal show={this.state.ordering} modalClosed={this.cancelPurchaseHandler}>
-                    <OrderSummary 
-                        ingredients={this.state.ingredients}
-                        cancelOrder={this.cancelPurchaseHandler}
-                        continueOrder={this.continuePurchaseHandler}
-                        price={this.state.totalPrice}/>
+                    {orderSummary}
                 </Modal>
     
                 <Burger ingredients={this.state.ingredients}/>
