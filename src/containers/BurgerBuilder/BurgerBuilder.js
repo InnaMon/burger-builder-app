@@ -16,16 +16,21 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients: null,
         totalPrice: 4,
         purchaseable: false,
         ordering: false,
         loading: false
+    }
+
+    componentDidMount () {
+        fetch('https://burger-builder-app-ca613.firebaseio.com/ingredients.json?orderBy="$key"')
+        .then(response => {
+            console.log('response ingredients:', response);
+            this.setState({ingredients: response.body})
+        })
+        .catch(error => {console.log('ingredients error found:', error)})
+
     }
 
     updatePurchaseState (ingredients) {
@@ -137,7 +142,8 @@ class BurgerBuilder extends Component {
 
         fetchWithBaseUrl('/orders.json')
         // ErrorBoundary will not work since we are catch and handling the error here. 
-        // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs 
+        // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs; use Lesson 199
+        // Maybe wrap Error Boundary comp around Burger Builder App to catch any errors
     }
 
     render () {
@@ -147,14 +153,32 @@ class BurgerBuilder extends Component {
         }
 
         const priceCopy = {...INGREDIENT_PRICES}
-
-        let orderSummary =  
-            <OrderSummary 
+        let orderSummary = null;
+        let burger = <Spinner />;
+        
+        if (this.state.ingredients) {
+            burger = (
+                <Aux>
+                    <Burger ingredients={this.state.ingredients}/>
+                    <BuildControls 
+                        ingredientAdded={this.addIngredientHandler}
+                        ingredientRemoved={this.removeIngredientHandler}
+                        disabled={disabledInfo}
+                        price={this.state.totalPrice}
+                        displayPrice={priceCopy}
+                        purchaseable={this.state.purchaseable}
+                        ordering={this.orderHandler}
+                    />
+                </Aux>
+            );
+            orderSummary = 
+            <OrderSummary   
                 ingredients={this.state.ingredients}
                 cancelOrder={this.cancelPurchaseHandler}
                 continueOrder={this.continuePurchaseHandler}
-                price={this.state.totalPrice}/>
-
+                price={this.state.totalPrice}
+            />
+        }
 
         if (this.state.loading) {
             orderSummary = <Spinner/>;
@@ -167,18 +191,7 @@ class BurgerBuilder extends Component {
                     {orderSummary}
                   </ErrorBoundary>
                 </Modal>
-
-                <Burger ingredients={this.state.ingredients}/>
-                
-                <BuildControls 
-                    ingredientAdded={this.addIngredientHandler}
-                    ingredientRemoved={this.removeIngredientHandler}
-                    disabled={disabledInfo}
-                    price={this.state.totalPrice}
-                    displayPrice={priceCopy}
-                    purchaseable={this.state.purchaseable}
-                    ordering={this.orderHandler}
-                />
+                {burger}
             </Aux>
         );
     }
