@@ -5,6 +5,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import ErrorBoundary from '../../hoc/ErrorBoundary/ErrorBoundary';
 
 const INGREDIENT_PRICES = {
     salad: 0.50,
@@ -52,7 +53,6 @@ class BurgerBuilder extends Component {
         };
         updatedIngredients[type] = updatedCount;
         const priceAddition = INGREDIENT_PRICES[type];
-        console.log('priceAddition', priceAddition)
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice + priceAddition;
         this.setState({
@@ -118,13 +118,14 @@ class BurgerBuilder extends Component {
                 }
             })
             // .then(response => response.json())
-            .then(response => {
-                console.log('response', response);
-                this.setState({ 
-                    loading: false,
-                    ordering: false
-                 });
-            })
+            // .then(response => {
+            //     console.log('response', response);
+            //     this.setState({ 
+            //         loading: false,
+            //         ordering: false
+            //      });
+            // })
+            .then(() => {throw new Error('Oops')})
             .catch(error => {
                 console.log('Error Found!', error);
                 this.setState({ 
@@ -146,13 +147,14 @@ class BurgerBuilder extends Component {
         }
 
         const priceCopy = {...INGREDIENT_PRICES}
-        console.log('priceCopy', priceCopy);
 
-        let orderSummary =  <OrderSummary 
-            ingredients={this.state.ingredients}
-            cancelOrder={this.cancelPurchaseHandler}
-            continueOrder={this.continuePurchaseHandler}
-            price={this.state.totalPrice}/>
+        let orderSummary =  
+            <OrderSummary 
+                ingredients={this.state.ingredients}
+                cancelOrder={this.cancelPurchaseHandler}
+                continueOrder={this.continuePurchaseHandler}
+                price={this.state.totalPrice}/>
+
 
         if (this.state.loading) {
             orderSummary = <Spinner/>;
@@ -161,9 +163,11 @@ class BurgerBuilder extends Component {
         return (
             <Aux>
                 <Modal show={this.state.ordering} modalClosed={this.cancelPurchaseHandler}>
+                  <ErrorBoundary>
                     {orderSummary}
+                  </ErrorBoundary>
                 </Modal>
-    
+
                 <Burger ingredients={this.state.ingredients}/>
                 
                 <BuildControls 
