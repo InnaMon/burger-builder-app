@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
+// import Modal from '../../components/UI/Modal/Modal';
 
 class ErrorBoundary extends Component {
     state = {
         hasError: false
     }
 
-    // static getDerivedStateFromError(error) {
-    //     this.setState({
-    //         hasError: true
-    //     });
-    //   }
+    componentDidUpdate() {}
 
     componentDidCatch(error, info) {
         this.setState({
@@ -20,9 +17,11 @@ class ErrorBoundary extends Component {
 
     render() {
         if (this.state.hasError) {
-            alert('Something went wrong!')
+            return <h1>Something went wrong!</h1>
+            // alert('Something went wrong!')
+            // return <Modal show>Something went wrong!</Modal>
         }
-        return this.props.children
+        return this.props.children;
     }
 }
 

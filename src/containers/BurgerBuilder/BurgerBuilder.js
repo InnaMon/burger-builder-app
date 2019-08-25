@@ -91,7 +91,6 @@ class BurgerBuilder extends Component {
     }
 
     continuePurchaseHandler = () => {
-        // alert('You continued!');
         this.setState({ loading: true });
 
         const order = {
@@ -118,14 +117,13 @@ class BurgerBuilder extends Component {
                 }
             })
             // .then(response => response.json())
-            // .then(response => {
-            //     console.log('response', response);
-            //     this.setState({ 
-            //         loading: false,
-            //         ordering: false
-            //      });
-            // })
-            .then(() => {throw new Error('Oops')})
+            .then(response => {
+                console.log('response', response);
+                this.setState({ 
+                    loading: false,
+                    ordering: false
+                 });
+            })
             .catch(error => {
                 console.log('Error Found!', error);
                 this.setState({ 
@@ -138,6 +136,8 @@ class BurgerBuilder extends Component {
         const fetchWithBaseUrl = genFetchWithBaseUrl('https://burger-builder-app-ca613.firebaseio.com/');
 
         fetchWithBaseUrl('/orders.json')
+        // ErrorBoundary will not work since we are catch and handling the error here. 
+        // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs 
     }
 
     render () {
