@@ -8,10 +8,11 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import ErrorBoundary from '../../hoc/ErrorBoundary/ErrorBoundary';
 
 const INGREDIENT_PRICES = {
-    salad: 0.50,
+    bacon: 0.70,
     cheese: 0.40,
     meat: 1.30,
-    bacon: 0.70
+    salad: 0.50
+    
 }
 
 class BurgerBuilder extends Component {
@@ -20,16 +21,25 @@ class BurgerBuilder extends Component {
         totalPrice: 4,
         purchaseable: false,
         ordering: false,
-        loading: false
+        loading: false,
+        error: false
     }
 
     componentDidMount () {
-        fetch('https://burger-builder-app-ca613.firebaseio.com/ingredients.json?orderBy="$key"')
-        .then(response => {
-            console.log('response ingredients:', response);
-            this.setState({ingredients: response.body})
+        fetch('https://burger-builder-app-ca613.firebaseio.com/ingredients.json')
+        .then(response=> response.json())
+        .then(object => {
+            console.log('ingredients object:', object);
+            this.setState({
+                ingredients: object,
+                purchaseable: true
+            })
         })
-        .catch(error => {console.log('ingredients error found:', error)})
+        .catch(error => {
+            console.log("Ingredients error found:", error)
+            this.setState({error: true})
+        })
+        // .catch(error => {console.log('ingredients error found:', error)})
 
     }
 
@@ -130,7 +140,7 @@ class BurgerBuilder extends Component {
                  });
             })
             .catch(error => {
-                console.log('Error Found!', error);
+                // console.log('Error Found!', error);
                 this.setState({ 
                     loading: false,
                     ordering: false
@@ -154,10 +164,10 @@ class BurgerBuilder extends Component {
 
         const priceCopy = {...INGREDIENT_PRICES}
         let orderSummary = null;
-        let burger = <Spinner />;
+        let burger = (this.state.error) ? <p>Ingredients can't be loaded</p> : <Spinner/>;
         
         if (this.state.ingredients) {
-            burger = (
+            burger = 
                 <Aux>
                     <Burger ingredients={this.state.ingredients}/>
                     <BuildControls 
@@ -170,7 +180,7 @@ class BurgerBuilder extends Component {
                         ordering={this.orderHandler}
                     />
                 </Aux>
-            );
+            
             orderSummary = 
             <OrderSummary   
                 ingredients={this.state.ingredients}
@@ -185,14 +195,14 @@ class BurgerBuilder extends Component {
         } 
 
         return (
+            <ErrorBoundary>
             <Aux>
                 <Modal show={this.state.ordering} modalClosed={this.cancelPurchaseHandler}>
-                  <ErrorBoundary>
                     {orderSummary}
-                  </ErrorBoundary>
                 </Modal>
                 {burger}
             </Aux>
+            </ErrorBoundary>
         );
     }
 }
