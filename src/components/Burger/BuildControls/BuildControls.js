@@ -32,3 +32,16 @@ const buildControls = (props) => (
 );
 
 export default buildControls;
+
+//turn into class based comp and use update lifecycle in order 
+// to retrieve new firebase data and display updated totalPrice
+
+// static getDerivedStateFromProps(nextProps, prevState) {
+//     console.log('getDerivedStateFromProps:', nextProps, prevState);
+//     if (prevState.ingredients !== nextProps.ingredients) {
+//         return {
+//             totalPrice: 
+//         }
+//     }
+//     return null;
+// }

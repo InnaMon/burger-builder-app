@@ -43,6 +43,16 @@ class BurgerBuilder extends Component {
 
     }
 
+    static getDerivedStateFromProps(nextProps, prevState) {
+        console.log('getDerivedStateFromProps:', nextProps, prevState);
+        if (prevState.ingredients !== nextProps.ingredients) {
+            return {
+
+            }
+        }
+        return null;
+    }
+
     updatePurchaseState (ingredients) {
         // const sum = Object.keys(ingredients)
         //   .map(igKey => {
@@ -136,11 +146,11 @@ class BurgerBuilder extends Component {
                 console.log('response', response);
                 this.setState({ 
                     loading: false,
-                    ordering: false
+                    ordering: false,
                  });
             })
             .catch(error => {
-                // console.log('Error Found!', error);
+                console.log('Error Found!', error);
                 this.setState({ 
                     loading: false,
                     ordering: false
@@ -150,10 +160,9 @@ class BurgerBuilder extends Component {
 
         const fetchWithBaseUrl = genFetchWithBaseUrl('https://burger-builder-app-ca613.firebaseio.com/');
 
-        fetchWithBaseUrl('/orders.json')
+        fetchWithBaseUrl('/orders')
         // ErrorBoundary will not work since we are catch and handling the error here. 
         // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs; use Lesson 199
-        // Maybe wrap Error Boundary comp around Burger Builder App to catch any errors
     }
 
     render () {
@@ -208,3 +217,6 @@ class BurgerBuilder extends Component {
 }
 
 export default BurgerBuilder;
+
+//TO DO: make total price more manual to that when hardcode any ingredients values they instantly update the total price
+// use updating lifecycle hooks 
