@@ -43,16 +43,6 @@ class BurgerBuilder extends Component {
 
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        console.log('getDerivedStateFromProps:', nextProps, prevState);
-        if (prevState.ingredients !== nextProps.ingredients) {
-            return {
-
-            }
-        }
-        return null;
-    }
-
     updatePurchaseState (ingredients) {
         // const sum = Object.keys(ingredients)
         //   .map(igKey => {
