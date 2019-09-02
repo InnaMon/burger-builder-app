@@ -157,7 +157,16 @@ class BurgerBuilder extends Component {
         // ErrorBoundary will not work since we are catch and handling the error here. 
         // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs; use Lesson 199
 
-        this.props.history.push('/checkout');
+        const queryParam = [];
+        for (let ingredient in this.state.ingredients) {
+            queryParam.push(encodeURIComponent(ingredient) + '=' + encodeURIComponent(this.state.ingredients[ingredient]));
+        }
+        const queryString = queryParam.join('&');
+
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        });
     }
 
     render () {
