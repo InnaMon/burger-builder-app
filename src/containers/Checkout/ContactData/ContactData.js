@@ -39,17 +39,18 @@ class ContactData extends Component {
             return (restOfUrl) => fetch((baseUrl + restOfUrl), {
                 method: 'POST',
                 body: JSON.stringify(order),
+                mode: 'no-cors',
                 headers:{
                     'Content-Type': 'application/json'
                 }
             })
-            // .then(response => response.json())
+            .then(response => response.json())
             .then(response => {
                 console.log('response', response);
                 this.setState({ 
                     loading: false
                  });
-                 this.props.history.push('/');
+                 this.props.history.push('/')
             })
             .catch(error => {
                 console.log('Error Found!', error);
@@ -61,7 +62,7 @@ class ContactData extends Component {
 
         const fetchWithBaseUrl = genFetchWithBaseUrl('https://burger-builder-app-ca613.firebaseio.com/');
 
-        fetchWithBaseUrl('/orders')
+        fetchWithBaseUrl('/orders.json')
         // NO LONGER WANT TO STORE CODE IN FIRBEASE, INSTEAD GO TO CHECKOUT PAGE!!!
 
         // ErrorBoundary will not work since we are catch and handling the error here. 
