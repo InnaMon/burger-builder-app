@@ -13,7 +13,10 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your Name'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                }
             },
             street: {
                 elementType: 'input',
@@ -21,7 +24,11 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Street'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false
             },
             zipCode: {
                 elementType: 'input',
@@ -29,7 +36,13 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'ZIP CODE'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true, 
+                    minLength: 5,
+                    maxLength: 5
+                },
+                valid: false
             },
             country: {
                 elementType: 'input',
@@ -37,7 +50,11 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Country'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false
             },
             email: {
                 elementType: 'input',
@@ -45,7 +62,11 @@ class ContactData extends Component {
                     type: 'email',
                     placeholder: 'Your E-mail'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                valid: false
             },
             deliverMethod: {
                 elementType: 'select',
@@ -112,11 +133,31 @@ class ContactData extends Component {
         // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs; use Lesson 199
     }
 
+    checkValidity(value, validation) {
+        let isValid = [];
+
+        if(validation.required) {
+            isValid.push(value.trim() !== ''); //set isValid equal to the value comparison(true/false) IF it is not equal to an empty string 
+        }
+
+        if(validation.minLength) {
+            isValid.push(value.length >= validation.minLength);
+        }
+
+        if(validation.maxLength) {
+            isValid.push(value.length <= validation.maxLength);
+        }
+
+        return isValid.indexOf(false) > -1 ? false : true;
+    }
+
     inputChangedHandler = (event, inputIdentifier) => {
         const updatedOrderForm = {...this.state.orderForm}; //shallow clone of orderForm (state object)
         const updatedFormElement = {...updatedOrderForm[inputIdentifier]}; //deep clone of selected key in orderForm
         updatedFormElement.value = event.target.value; //assign event to the selected key value
+        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation); //updated valid property by passing the value and a true statement to handler
         updatedOrderForm[inputIdentifier] =  updatedFormElement; //selected key equal to the updatedFormElement which now holds the event.target.value
+        console.log('updatedFormElement', updatedFormElement);
         this.setState({orderForm: updatedOrderForm}); //orderForm (state object) updated to copy, immutably updated any affected form elements
         
     }
