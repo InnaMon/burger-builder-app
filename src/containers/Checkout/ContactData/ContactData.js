@@ -106,6 +106,15 @@ class ContactData extends Component {
         // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs; use Lesson 199
     }
 
+    inputChangedHandler = (event, inputIdentifier) => {
+        const updatedOrderForm = {...this.state.orderForm}; //shallow clone of orderForm (state object)
+        const updatedFormElement = {...updatedOrderForm[inputIdentifier]}; //deep clone of selected key in orderForm
+        updatedFormElement.value = event.target.value; //assign event to the selected key value
+        updatedOrderForm[inputIdentifier] =  updatedFormElement; //selected key equal to the updatedFormElement which now holds the event.target.value
+        this.setState({orderForm: updatedOrderForm}); //orderForm (state object) updated to copy 
+        
+    }
+
     render() {
         const formElementsArray = [];
         for (let key in this.state.orderForm) {
@@ -128,6 +137,7 @@ class ContactData extends Component {
                         elementType={formElement.config.elementType} 
                         elementConfig={formElement.config.elementConfig} 
                         value={formElement.config.value}
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
                     />
                 ))}
 
