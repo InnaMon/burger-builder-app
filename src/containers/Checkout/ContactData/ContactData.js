@@ -85,6 +85,7 @@ class ContactData extends Component {
                 value: ''
             }
         },
+        formIsValid: false,
         loading: false
     }
 
@@ -175,8 +176,20 @@ class ContactData extends Component {
         updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation); //updated valid property by passing the value and a true statement to handler
         updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] =  updatedFormElement; //selected key equal to the updatedFormElement which now holds the event.target.value
+        
+        const validArray = [];
+        for (let inputIdentifier in updatedOrderForm) {
+            if ( updatedOrderForm[inputIdentifier].valid !== undefined ) {
+                validArray.push(updatedOrderForm[inputIdentifier].valid) //will push true/false value into array
+            }
+        }
+        let formValid = validArray.includes(false) ? false : true; //formValid return only is it include a false value within an array
+        
         console.log('updatedFormElement', updatedFormElement);
-        this.setState({orderForm: updatedOrderForm}); //orderForm (state object) updated to copy, immutably updated any affected form elements
+        this.setState({
+            orderForm: updatedOrderForm, //orderForm (state object) updated to copy, immutably updated any affected form elements
+            formIsValid: formValid
+        }); 
         
     }
 
@@ -208,7 +221,7 @@ class ContactData extends Component {
                     />
                 ))}
 
-                <Button btnType="Success" >ORDER</Button>
+                <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
             </form>
         );
         if (this.state.loading) {
