@@ -16,7 +16,9 @@ class ContactData extends Component {
                 value: '',
                 validation: {
                     required: true
-                }
+                },
+                valid: false,
+                touched: false
             },
             street: {
                 elementType: 'input',
@@ -28,7 +30,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             zipCode: {
                 elementType: 'input',
@@ -42,7 +45,8 @@ class ContactData extends Component {
                     minLength: 5,
                     maxLength: 5
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             country: {
                 elementType: 'input',
@@ -54,7 +58,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             email: {
                 elementType: 'input',
@@ -66,7 +71,8 @@ class ContactData extends Component {
                 validation: {
                     required: true
                 },
-                valid: false
+                valid: false,
+                touched: false
             },
             deliverMethod: {
                 elementType: 'select',
@@ -167,6 +173,7 @@ class ContactData extends Component {
         const updatedFormElement = {...updatedOrderForm[inputIdentifier]}; //deep clone of selected key in orderForm
         updatedFormElement.value = event.target.value; //assign event to the selected key value
         updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation); //updated valid property by passing the value and a true statement to handler
+        updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] =  updatedFormElement; //selected key equal to the updatedFormElement which now holds the event.target.value
         console.log('updatedFormElement', updatedFormElement);
         this.setState({orderForm: updatedOrderForm}); //orderForm (state object) updated to copy, immutably updated any affected form elements
@@ -195,6 +202,7 @@ class ContactData extends Component {
                         value={formElement.config.value}
                         invalid={!formElement.config.valid}
                         shouldValidate={formElement.config.validation}
+                        touched={formElement.config.touched}
                         changed={(event) => this.inputChangedHandler(event, formElement.id)}
                     />
                 ))}
