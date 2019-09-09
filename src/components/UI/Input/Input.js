@@ -3,18 +3,23 @@ import styles from './Input.module.css';
 
 const input = (props) => {
     let inputElement = null;
+    const inputClasses = [styles.inputElement];
+
+    if (props.invalid && props.shouldValidate) {
+        inputClasses.push(styles.Invalid)
+    }
 
     switch (props.elementType) {
         case ('input'):
             inputElement = <input 
-                className={styles.inputElement} 
+                className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
                 value={props.value}
                 onChange={props.changed}/>
             break;
          case ('textarea'):
             inputElement = <textarea 
-                className={styles.inputElement} 
+                className={inputClasses} 
                 {...props.elementConfig} 
                 value={props.value}
                 onChange={props.changed}
@@ -23,9 +28,9 @@ const input = (props) => {
         case ('select'):
             inputElement = (
                 <select 
-                    className={styles.inputElement} 
-                    value={props.value}>
-                    onChange={props.changed}
+                    className={inputClasses} 
+                    value={props.value}
+                    onChange={props.changed}>
                     {props.elementConfig.options.map(option => (
                         <option key={option.value} value={option.value}>
                             {option.displayValue}
