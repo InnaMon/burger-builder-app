@@ -134,22 +134,33 @@ class ContactData extends Component {
     }
 
     checkValidity(value, validation) {
+        // if (validation.required && value.trim() == '') return false; 
+        // //return false if validtaion is true AND value is equal to an empty string 
+        // if (validation.minLength && value.length > validation.minLength) return false;
+        // if (validation.maxLength && value.length < validation.maxLength) return false;
+
+        // return true;
+
         let isValid = [];
-
-        if(validation.required) {
-            isValid.push(value.trim() !== ''); //set isValid equal to the value comparison(true/false) IF it is not equal to an empty string 
+ 
+        if (validation.required) {
+            isValid.push(value.trim() !== '');
         }
-
-        if(validation.minLength) {
+    
+        if (validation.minLength) {
             isValid.push(value.length >= validation.minLength);
         }
-
-        if(validation.maxLength) {
+    
+        if (validation.maxLength) {
             isValid.push(value.length <= validation.maxLength);
         }
-
+    
+        console.log('isValid array', isValid);
         return isValid.indexOf(false) > -1 ? false : true;
-    }
+        //while searching if false exists inside array, if false does NOT exist, will return -1
+        //if false DOES exist will return a vallue > -1
+        //if if false exists, return false AND if false does not exist return true 
+        }
 
     inputChangedHandler = (event, inputIdentifier) => {
         const updatedOrderForm = {...this.state.orderForm}; //shallow clone of orderForm (state object)
