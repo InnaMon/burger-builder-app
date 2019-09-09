@@ -107,52 +107,6 @@ class BurgerBuilder extends Component {
     }
 
     continuePurchaseHandler = () => {
-        // this.setState({ loading: true });
-
-        // const order = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.state.totalPrice,
-        //     customer: {
-        //         name: 'Inna Monjoseph',
-        //         address: {
-        //             street: 'Teststreet 1',
-        //             zipCode: '55379',
-        //             country: 'USA'
-        //         },
-        //         email: 'test@test.com'
-        //     },
-        //     deliverMethod: 'fastest'
-        // }
-
-        // const genFetchWithBaseUrl = (baseUrl) => {
-        //     return (restOfUrl) => fetch((baseUrl + restOfUrl), {
-        //         method: 'POST',
-        //         body: JSON.stringify(order),
-        //         headers:{
-        //             'Content-Type': 'application/json'
-        //         }
-        //     })
-        //     // .then(response => response.json())
-        //     .then(response => {
-        //         console.log('response', response);
-        //         this.setState({ 
-        //             loading: false,
-        //             ordering: false,
-        //          });
-        //     })
-        //     .catch(error => {
-        //         console.log('Error Found!', error);
-        //         this.setState({ 
-        //             loading: false,
-        //             ordering: false
-        //         });
-        //     })
-        // }
-
-        // const fetchWithBaseUrl = genFetchWithBaseUrl('https://burger-builder-app-ca613.firebaseio.com/');
-
-        // fetchWithBaseUrl('/orders')
-        // NO LONGER WANT TO STORE CODE IN FIRBEASE, INSTEAD GO TO CHECKOUT PAGE!!!
 
         // ErrorBoundary will not work since we are catch and handling the error here. 
         // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs; use Lesson 199
