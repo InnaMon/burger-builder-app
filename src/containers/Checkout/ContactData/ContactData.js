@@ -82,7 +82,9 @@ class ContactData extends Component {
                         {value: 'cheapest', displayValue: 'Cheapest'}
                     ]
                 },
-                value: ''
+                value: 'fastest', //if never actually lick on option.value, form will send request with value = empty string; NOT GOOD!!! so use 'fastest as default
+                validation: {},
+                valid: true
             }
         },
         formIsValid: false,
@@ -179,9 +181,7 @@ class ContactData extends Component {
         
         const validArray = [];
         for (let inputIdentifier in updatedOrderForm) {
-            if ( updatedOrderForm[inputIdentifier].valid !== undefined ) {
                 validArray.push(updatedOrderForm[inputIdentifier].valid) //will push true/false value into array
-            }
         }
         let formValid = validArray.includes(false) ? false : true; //formValid return only is it include a false value within an array
         
