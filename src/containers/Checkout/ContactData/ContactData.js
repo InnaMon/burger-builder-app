@@ -67,9 +67,15 @@ class ContactData extends Component {
 
         this.setState({ loading: true });
 
+        const formData = {}
+        for (let formElId in this.state.orderForm) {
+            formData[formElId] = this.state.orderForm[formElId].value; //adds the formElId to the formData object and has the key equal to state formElId value
+        }
+
         const order = {
             ingredients: this.props.ingredients,
-            price: this.props.price
+            price: this.props.price,
+            orderDate: formData
         }
 
         const genFetchWithBaseUrl = (baseUrl) => {
@@ -111,7 +117,7 @@ class ContactData extends Component {
         const updatedFormElement = {...updatedOrderForm[inputIdentifier]}; //deep clone of selected key in orderForm
         updatedFormElement.value = event.target.value; //assign event to the selected key value
         updatedOrderForm[inputIdentifier] =  updatedFormElement; //selected key equal to the updatedFormElement which now holds the event.target.value
-        this.setState({orderForm: updatedOrderForm}); //orderForm (state object) updated to copy 
+        this.setState({orderForm: updatedOrderForm}); //orderForm (state object) updated to copy, immutably updated any affected form elements
         
     }
 
@@ -128,7 +134,7 @@ class ContactData extends Component {
         }
 
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                 <Input elementType="..." elementConfig="..." value="..."/>
 
                 {formElementsArray.map((formElement) => (
@@ -141,7 +147,7 @@ class ContactData extends Component {
                     />
                 ))}
 
-                <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
+                <Button btnType="Success" >ORDER</Button>
             </form>
         );
         if (this.state.loading) {
