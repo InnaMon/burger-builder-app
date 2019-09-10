@@ -143,13 +143,6 @@ class ContactData extends Component {
     }
 
     checkValidity(value, validation) {
-        // if (validation.required && value.trim() == '') return false; 
-        // //return false if validtaion is true AND value is equal to an empty string 
-        // if (validation.minLength && value.length > validation.minLength) return false;
-        // if (validation.maxLength && value.length < validation.maxLength) return false;
-
-        // return true;
-
         let isValid = [];
  
         if (validation.required) {
