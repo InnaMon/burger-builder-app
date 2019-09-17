@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import Aux from '../../hoc/Auxillary/Auxillary';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -6,6 +8,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import ErrorBoundary from '../../hoc/ErrorBoundary/ErrorBoundary';
+import * as actionTypes from '../../store/actions';
 
 const INGREDIENT_PRICES = {
     bacon: 0.70,
@@ -17,7 +20,6 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients: null,
         totalPrice: 4,
         purchaseable: false, //local UI state
         ordering: false, //local UI state
@@ -174,7 +176,20 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default BurgerBuilder;
+const mapStateToProps = state => {
+    return {
+        ing: state.ingredients
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
+        onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BurgerBuilder);
 
 //TO DO: make total price more manual to that when hardcode any ingredients values they instantly update the total price
 // use updating lifecycle hooks 
