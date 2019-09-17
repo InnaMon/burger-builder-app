@@ -10,17 +10,8 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import ErrorBoundary from '../../hoc/ErrorBoundary/ErrorBoundary';
 import * as actionTypes from '../../store/actions';
 
-const INGREDIENT_PRICES = {
-    bacon: 0.70,
-    cheese: 0.40,
-    meat: 1.30,
-    salad: 0.50
-    
-}
-
 class BurgerBuilder extends Component {
     state = {
-        totalPrice: 4,
         purchaseable: false, //local UI state
         ordering: false, //local UI state
         loading: false, //local UI state
@@ -61,42 +52,42 @@ class BurgerBuilder extends Component {
         this.setState({purchaseable: sum > 0})
     }
 
-    addIngredientHandler = (type) => {
-        const oldCount = this.state.ingredients[type];
-        const updatedCount = oldCount + 1;
-        const updatedIngredients = {
-            ...this.state.ingredients
-        };
-        updatedIngredients[type] = updatedCount;
-        const priceAddition = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const newPrice = oldPrice + priceAddition;
-        this.setState({
-            totalPrice: newPrice, 
-            ingredients: updatedIngredients
-        });
-        this.updatePurchaseState(updatedIngredients);
-    }
+    // addIngredientHandler = (type) => {
+    //     const oldCount = this.state.ingredients[type];
+    //     const updatedCount = oldCount + 1;
+    //     const updatedIngredients = {
+    //         ...this.state.ingredients
+    //     };
+    //     updatedIngredients[type] = updatedCount;
+    //     const priceAddition = INGREDIENT_PRICES[type];
+    //     const oldPrice = this.state.totalPrice;
+    //     const newPrice = oldPrice + priceAddition;
+    //     this.setState({
+    //         totalPrice: newPrice, 
+    //         ingredients: updatedIngredients
+    //     });
+    //     this.updatePurchaseState(updatedIngredients);
+    // }
 
-    removeIngredientHandler = (type) => {
-        const oldCount = this.state.ingredients[type];
-        if (oldCount <= 0) {
-            return;
-        } //return nothing is ingredient[type] is at 0
-        const updatedCount = oldCount - 1;
-        const updatedIngredients = {
-            ...this.state.ingredients
-        };
-        updatedIngredients[type] = updatedCount;
-        const priceSubtraction = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const newPrice = oldPrice - priceSubtraction;
-        this.setState({
-            totalPrice: newPrice, 
-            ingredients: updatedIngredients
-        });
-        this.updatePurchaseState(updatedIngredients);
-    }
+    // removeIngredientHandler = (type) => {
+    //     const oldCount = this.state.ingredients[type];
+    //     if (oldCount <= 0) {
+    //         return;
+    //     } //return nothing is ingredient[type] is at 0
+    //     const updatedCount = oldCount - 1;
+    //     const updatedIngredients = {
+    //         ...this.state.ingredients
+    //     };
+    //     updatedIngredients[type] = updatedCount;
+    //     const priceSubtraction = INGREDIENT_PRICES[type];
+    //     const oldPrice = this.state.totalPrice;
+    //     const newPrice = oldPrice - priceSubtraction;
+    //     this.setState({
+    //         totalPrice: newPrice, 
+    //         ingredients: updatedIngredients
+    //     });
+    //     this.updatePurchaseState(updatedIngredients);
+    // }
 
     orderHandler = () => {
         this.setState({ordering: true})
@@ -115,7 +106,7 @@ class BurgerBuilder extends Component {
         for (let ingredient in this.state.ingredients) {
             queryParam.push(encodeURIComponent(ingredient) + '=' + encodeURIComponent(this.state.ingredients[ingredient]));
         }
-        queryParam.push('price='+this.state.totalPrice);
+        queryParam.push('price='+this.prop.price);
         
         const queryString = queryParam.join('&');
 
@@ -131,7 +122,7 @@ class BurgerBuilder extends Component {
             disabledInfo[key] = disabledInfo[key] <= 0; //return true is 0 or less, disabledInfo[key] is the property (value of eack key-value pair)
         }
 
-        const priceCopy = {...INGREDIENT_PRICES}
+        const priceCopy = this.props.price
         let orderSummary = null;
         let burger = (this.state.error) ? <p>Ingredients can't be loaded</p> : <Spinner/>;
         
@@ -143,7 +134,7 @@ class BurgerBuilder extends Component {
                         ingredientAdded={this.props.onIngredientAdded}
                         ingredientRemoved={this.props.onIngredientRemoved}
                         disabled={disabledInfo}
-                        price={this.state.totalPrice}
+                        price={this.props.price}
                         displayPrice={priceCopy}
                         purchaseable={this.state.purchaseable}
                         ordering={this.orderHandler}
@@ -155,7 +146,7 @@ class BurgerBuilder extends Component {
                 ingredients={this.props.ings}
                 cancelOrder={this.cancelPurchaseHandler}
                 continueOrder={this.continuePurchaseHandler}
-                price={this.state.totalPrice}
+                price={this.props.price}
             />
         }
 
@@ -178,7 +169,8 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients
+        ings: state.ingredients,
+        price: state.totalPrice
     }
 }
 
