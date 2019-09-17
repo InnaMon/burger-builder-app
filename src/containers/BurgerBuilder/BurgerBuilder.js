@@ -25,24 +25,22 @@ class BurgerBuilder extends Component {
         error: false //local UI state
     }
 
-    componentDidMount () {
-        console.log('react-routing props', this.props)
-        fetch('https://burger-builder-app-ca613.firebaseio.com/ingredients.json')
-        .then(response=> response.json())
-        .then(object => {
-            console.log('ingredients object:', object);
-            this.setState({
-                ingredients: object,
-                purchaseable: true
-            })
-        })
-        .catch(error => {
-            console.log("Ingredients error found:", error)
-            this.setState({error: true})
-        })
-        // .catch(error => {console.log('ingredients error found:', error)})
-
-    }
+    // componentDidMount () {
+    //     console.log('react-routing props', this.props)
+    //     fetch('https://burger-builder-app-ca613.firebaseio.com/ingredients.json')
+    //     .then(response=> response.json())
+    //     .then(object => {
+    //         console.log('ingredients object:', object);
+    //         this.setState({
+    //             ingredients: object,
+    //             purchaseable: true
+    //         })
+    //     })
+    //     .catch(error => {
+    //         console.log("Ingredients error found:", error)
+    //         this.setState({error: true})
+    //     })
+    // }
 
     updatePurchaseState (ingredients) {
         // const sum = Object.keys(ingredients)
