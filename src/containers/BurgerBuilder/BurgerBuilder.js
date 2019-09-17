@@ -12,7 +12,6 @@ import * as actionTypes from '../../store/actions';
 
 class BurgerBuilder extends Component {
     state = {
-        purchaseable: false, //local UI state
         ordering: false, //local UI state
         loading: false, //local UI state
         error: false //local UI state
@@ -49,7 +48,7 @@ class BurgerBuilder extends Component {
             .reduce((accumulator, currentValue) => {
                 return accumulator + currentValue;
                 }, 0);
-        this.setState({purchaseable: sum > 0})
+        return sum > 0;
     }
 
     // addIngredientHandler = (type) => {
@@ -102,18 +101,15 @@ class BurgerBuilder extends Component {
         // ErrorBoundary will not work since we are catch and handling the error here. 
         // TO DO: establish global error handling inside to display a modal with error message if a fetch error occurs; use Lesson 199
 
-        const queryParam = [];
-        for (let ingredient in this.state.ingredients) {
-            queryParam.push(encodeURIComponent(ingredient) + '=' + encodeURIComponent(this.state.ingredients[ingredient]));
-        }
-        queryParam.push('price='+this.prop.price);
+        // const queryParam = [];
+        // for (let ingredient in this.state.ingredients) {
+        //     queryParam.push(encodeURIComponent(ingredient) + '=' + encodeURIComponent(this.state.ingredients[ingredient]));
+        // }
+        // queryParam.push('price='+this.prop.price);
         
-        const queryString = queryParam.join('&');
+        // const queryString = queryParam.join('&');
 
-        this.props.history.push({
-            pathname: '/checkout',
-            search: '?' + queryString
-        });
+        this.props.history.push('/checkout');
     }
 
     render () {
@@ -136,7 +132,7 @@ class BurgerBuilder extends Component {
                         disabled={disabledInfo}
                         price={this.props.price}
                         displayPrice={priceCopy}
-                        purchaseable={this.state.purchaseable}
+                        purchaseable={this.updatePurchaseState(this.props.ings)}
                         ordering={this.orderHandler}
                     />
                 </Aux>
