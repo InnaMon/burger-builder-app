@@ -126,7 +126,7 @@ class BurgerBuilder extends Component {
     }
 
     render () {
-        const disabledInfo = {...this.state.ingredients};
+        const disabledInfo = {...this.props.ings};
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0; //return true is 0 or less, disabledInfo[key] is the property (value of eack key-value pair)
         }
@@ -135,13 +135,13 @@ class BurgerBuilder extends Component {
         let orderSummary = null;
         let burger = (this.state.error) ? <p>Ingredients can't be loaded</p> : <Spinner/>;
         
-        if (this.state.ingredients) {
+        if (this.props.ings) {
             burger = 
                 <Aux>
-                    <Burger ingredients={this.state.ingredients}/>
+                    <Burger ingredients={this.props.ings}/>
                     <BuildControls 
-                        ingredientAdded={this.addIngredientHandler}
-                        ingredientRemoved={this.removeIngredientHandler}
+                        ingredientAdded={this.props.onIngredientAdded}
+                        ingredientRemoved={this.props.onIngredientRemoved}
                         disabled={disabledInfo}
                         price={this.state.totalPrice}
                         displayPrice={priceCopy}
@@ -152,7 +152,7 @@ class BurgerBuilder extends Component {
             
             orderSummary = 
             <OrderSummary   
-                ingredients={this.state.ingredients}
+                ingredients={this.props.ings}
                 cancelOrder={this.cancelPurchaseHandler}
                 continueOrder={this.continuePurchaseHandler}
                 price={this.state.totalPrice}
@@ -178,7 +178,7 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ing: state.ingredients
+        ings: state.ingredients
     }
 }
 
