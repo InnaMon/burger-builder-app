@@ -178,7 +178,7 @@ class ContactData extends Component {
         for (let inputIdentifier in updatedOrderForm) {
                 validArray.push(updatedOrderForm[inputIdentifier].valid) //will push true/false value into array
         }
-        let formValid = validArray.includes(false) ? false : true; //formValid return only is it include a false value within an array
+        let formValid = validArray.includes(false) ? false : true; //formValid return only if it include a false value within an array
         
         console.log('updatedFormElement', updatedFormElement);
         this.setState({
