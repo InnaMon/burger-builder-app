@@ -38,6 +38,41 @@ class Auth extends Component {
         }
     }
 
+    checkValidity(value, validation) {
+        let isValid = [];
+ 
+        if (validation.required) {
+            isValid.push(value.trim() !== '');
+        }
+    
+        if (validation.minLength) {
+            isValid.push(value.length >= validation.minLength);
+        }
+    
+        // if (validation.maxLength) {
+        //     isValid.push(value.length <= validation.maxLength);
+        // }
+    
+        console.log('isValid array', isValid);
+        return isValid.indexOf(false) > -1 ? false : true;
+        //while searching if false exists inside array, if false does NOT exist, will return -1
+        //if false DOES exist will return a vallue > -1
+        //if if false exists, return false AND if false does not exist return true 
+        }
+
+    inputChangedHandler = (event, controlName) => {
+        const updatedControls = {
+            ...this.state.controls,
+            [controlName]: {
+                ...this.state.controls[controlName],
+                value: event.target.value,
+                valid: this.checkValidity(event.target.value, this.state.controls[controlName].validation),
+                touched: true
+            }
+        }; 
+        this.setState({controls: updatedControls});
+    }
+
     render() {
         const formElementsArray = [];
         for (let key in this.state.controls) {
